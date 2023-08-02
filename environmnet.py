@@ -2,17 +2,15 @@ import numpy as np
 
 
 class Env:
-    def __init__(self, high=16, low=4) -> None:
-        assert high > 0 and low > 0
-        self.high = high
-        self.low = low
-        self.n_floor = high + low - 1
+    def __init__(self, l_bot, l_top, r_bot, r_top) -> None:
+        self.l_bot = l_bot
+        self.l_top = l_top
+        self.r_bot = r_bot
+        self.r_top = r_top
 
     def get_floor_uniform(self) -> np.ndarray:
-        floors = np.random.randint(low=1, high=self.n_floor, size=(2,))
-        for i in range(2):
-            if floors[i] <= self.low:
-                floors[i] = -floors[i]
-            else:
-                floors[i] = floors[i] - self.low + 1
-        return floors
+        l_idx = np.random.randint(low=0, high=self.l_top-self.l_bot)
+        r_idx = np.random.randint(low=0, high=self.r_top-self.r_bot)
+        l_floor = l_idx - abs(self.l_bot)
+        r_floor = r_idx - abs(self.r_bot)
+        return (l_idx, r_idx, l_floor, r_floor)
